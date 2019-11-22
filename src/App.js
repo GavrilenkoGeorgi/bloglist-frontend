@@ -2,24 +2,21 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import BlogAddForm from './components/BlogAddForm'
-// import Footer from './components/Footer'
 import blogService from './services/blogs'
 import loginService from './services/login'
-// import blogs from './services/blogs'
-// import './index.css'
+import Togglable from './components/Togglable'
 
 const App = (props) => {
-  
+
   const [blogs, setBlogs] = useState([])
-  // const [newBlog, setNewBlog] = useState('a new Blog')
   const [title, setTitle] = useState('New title')
   const [author, setAuthor] = useState('New author')
   const [url, setUrl] = useState('New url')
-  // const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const blogFormRef = React.createRef()
 
   useEffect(() => {
     blogService
@@ -48,79 +45,37 @@ const App = (props) => {
     setUrl(event.target.value)
   }
 
-const addBlog = event => {
-  event.preventDefault()
+  const addBlog = event => {
+    event.preventDefault()
 
-  const blogObject = {
-    title: title,
-    author: author,
-    url: url
-  }
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
+    }
 
-  blogService
-    .create(blogObject)
-    .then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-    }).catch(error => {
-        setErrorMessage(`Can't add blog: ${error.message}`)
-        setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }).finally(() => {
-        setErrorMessage(`Blog added ${blogObject.title} ${blogObject.author}`)
-        setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    })
-}
-
-  /*
-  const handleBlogChange = event => {
-    setNewBlog(event.target.value)
-  } */
-
-/*
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important === true)
-
-  const rows = () => notesToShow.map(note =>
-    <Note
-      key={note.id}
-      note={note}
-      toggleImportance={() => toggleImportanceOf(note.id)}
-    />
-  )
-*/
-
-
-/*
-  const toggleImportanceOf = id => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-
-    noteService
-      .update(id, changedNote)
-      .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(error => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
-        setTimeout(() => {
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+      }).catch(error => {
+          setErrorMessage(`Can't add blog: ${error.message}`)
+          setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
-        setNotes(notes.filter(n => n.id !== id))
+      }).finally(() => {
+          setErrorMessage(`Blog added ${blogObject.title} ${blogObject.author}`)
+          setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
   }
-*/
+
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('Login')
 
     try {
       const user = await loginService.login({
@@ -145,7 +100,6 @@ const addBlog = event => {
 
   const handleLogout = async event => {
     event.preventDefault()
-    console.log('Loggin out')
     try {
       localStorage.removeItem('loggedBlogappUser')
       document.location.href='/'
@@ -185,6 +139,20 @@ const addBlog = event => {
     </>
   )
 
+  const blogForm = () => (
+    <Togglable buttonLabel="new blog" ref={blogFormRef}>
+      <BlogAddForm
+          onSubmit={addBlog}
+          author={author}
+          title={title}
+          url={url}
+          handleTitleChange={handleTitleChange}
+          handleAuthorChange={handleAuthorChange}
+          handleUrlChange={handleUrlChange}
+      />
+    </Togglable>
+  )
+
   return (
     <div>
       <Notification message={errorMessage} />
@@ -203,37 +171,13 @@ const addBlog = event => {
             >
               Logout
           </button>
-          <BlogAddForm
-              onSubmit={addBlog}
-              author={author}
-              title={title}
-              url={url}
-              handleTitleChange={handleTitleChange}
-              handleAuthorChange={handleAuthorChange}
-              handleUrlChange={handleUrlChange}
-            />
+          {blogForm()}
           <h2>Blogs</h2>
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog} />
             )}
         </div>
       }
-
-      {/*<div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all'}
-        </button>
-      </div>
-      <ul>
-        {rows()}
-      </ul>
-      <form onSubmit={addNote}>
-        <input value={newNote}
-          onChange={handleNoteChange}
-        />
-        <button type="submit">save</button>
-      </form>
-      <Footer />*/}
     </div>
   )
 }

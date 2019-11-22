@@ -6,7 +6,7 @@ let token = null
 
 const setToken = newToken => {
   token = `bearer ${newToken}`
-  console.log(`Token is: ${token}`)
+  // console.log(`Token is: ${token}`)
 }
 
 const removeToken = () => console.log('Removing from localStorage')

@@ -1,21 +1,29 @@
 import React from 'react'
 
-const BlogAddForm = (props) => (
-
-  <form onSubmit={props.onSubmit}>
+const BlogAddForm = ({
+  onSubmit,
+  title,
+  author,
+  url,
+  handleTitleChange,
+  handleAuthorChange,
+  handleUrlChange
+  }) => (
+  // remove props, use destructuring
+  <form onSubmit={onSubmit}>
     <input
-      value={props.title}
-      onChange={props.handleTitleChange}
+      value={title}
+      onChange={handleTitleChange}
     /><br />
     <input
-      value={props.author}
-      onChange={props.handleAuthorChange}
+      value={author}
+      onChange={handleAuthorChange}
     /><br />
     <input
-      value={props.url}
-      onChange={props.handleUrlChange}
+      value={url}
+      onChange={handleUrlChange}
     /><br />
-    <button type="submit">save</button>
+    <button type="submit">create</button>
   </form>
 )
 
