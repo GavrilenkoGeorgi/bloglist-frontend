@@ -22,7 +22,10 @@ const App = (props) => {
     blogService
       .getAll()
       .then(initialBlogs => {
-        setBlogs(initialBlogs)
+        initialBlogs.sort(function (a, b) {
+          return a.likes - b.likes
+        })
+        setBlogs(initialBlogs.reverse())
       })
   }, [])
 
@@ -31,6 +34,7 @@ const App = (props) => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      // console.log('User id', user)
       blogService.setToken(user.token)
     }
   }, [])
@@ -153,6 +157,59 @@ const App = (props) => {
     </Togglable>
   )
 
+  const updateLikes = (blog) => {
+    const blogObject = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id
+    }
+
+    blogService
+      .update(blog.id, blogObject)
+      /*
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+      })*/
+      .catch(error => {
+          setErrorMessage(`Can't update blog: ${error.message}`)
+          setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }).finally(() => {
+          setErrorMessage(`Blog updated ${blogObject.title} ${blogObject.author}`)
+          setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
+
+  const deleteBlog = id => {
+    // console.log('Deleting blog with id >>', id)
+    if (window.confirm(`Do you really want to delete blog with id of: ${id}?`)) {
+      blogService
+      .deleteBlog(id)
+      .then(response => {
+        setBlogs(blogs.filter(blog => blog.id !== id))
+      })
+      .catch(error => {
+        setErrorMessage(`Can't delete blog: ${error.message}`)
+        setTimeout(() => {
+        setErrorMessage(null)
+        }, 5000)
+      }).finally(() => {
+        setErrorMessage(`Blog deleted ${id}`)
+        setTimeout(() => {
+        setErrorMessage(null)
+        }, 5000)
+      })
+    }
+  }
+
   return (
     <div>
       <Notification message={errorMessage} />
@@ -174,7 +231,13 @@ const App = (props) => {
           {blogForm()}
           <h2>Blogs</h2>
             {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleUpdate={updateLikes}
+                handleDelete={deleteBlog}
+                currentUserName={user.username}
+              />
             )}
         </div>
       }

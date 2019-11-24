@@ -9,7 +9,6 @@ const BlogAddForm = ({
   handleAuthorChange,
   handleUrlChange
   }) => (
-  // remove props, use destructuring
   <form onSubmit={onSubmit}>
     <input
       value={title}

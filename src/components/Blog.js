@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleUpdate, handleDelete, currentUserName }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,9 +21,15 @@ const Blog = ({ blog }) => {
         {blog.url}
         <br />
         {blog.likes} likes
-        <button type="button">like</button>
+        <button type="button" onClick={() => handleUpdate(blog)}>like</button>
         <br />
         added by {blog.author}
+        <br />
+        Author id is: {blog.user.id} <br />
+        Current user id is: {currentUserName} <br />
+        {currentUserName === blog.author &&
+          <button type="button" onClick={() => handleDelete(blog.id)}>delete</button>
+        }
       </div>
     </div>
   </div>
