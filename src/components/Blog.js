@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const Blog = ({ blog, handleUpdate, handleDelete, currentUserName }) => {
@@ -15,26 +15,26 @@ const Blog = ({ blog, handleUpdate, handleDelete, currentUserName }) => {
   const showWhenVisible = { display: visible ? '' : 'none' }
 
   return (
-  <div style={blogStyle}>
-    <div onClick={() => setVisible(!visible)}>
+    <div style={blogStyle}>
+      <div onClick={() => setVisible(!visible)}>
         {blog.title} {blog.author}
-      <div style={showWhenVisible}>
-        {blog.url}
-        <br />
-        {blog.likes} likes
-        <button type="button" onClick={() => handleUpdate(blog)}>like</button>
-        <br />
+        <div style={showWhenVisible}>
+          {blog.url}
+          <br />
+          {blog.likes} likes
+          <button type="button" onClick={() => handleUpdate(blog)}>like</button>
+          <br />
         added by {blog.author}
-        <br />
+          <br />
         Author id is: {blog.user.id} <br />
         Current user id is: {currentUserName} <br />
-        {currentUserName === blog.author &&
+          {currentUserName === blog.author &&
           <button type="button" onClick={() => handleDelete(blog.id)}>delete</button>
-        }
+          }
+        </div>
       </div>
     </div>
-  </div>
-)}
+  )}
 
 Blog.propTypes = {
   handleUpdate: PropTypes.func.isRequired,

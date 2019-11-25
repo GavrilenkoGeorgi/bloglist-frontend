@@ -9,7 +9,7 @@ const BlogAddForm = ({
   handleTitleChange,
   handleAuthorChange,
   handleUrlChange
-  }) => (
+}) => (
   <form onSubmit={onSubmit}>
     <input
       value={title}

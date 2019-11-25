@@ -6,8 +6,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
 
-const App = (props) => {
-
+const App = () => {
   const [blogs, setBlogs] = useState([])
   const [title, setTitle] = useState('New title')
   const [author, setAuthor] = useState('New author')
@@ -34,7 +33,6 @@ const App = (props) => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      // console.log('User id', user)
       blogService.setToken(user.token)
     }
   }, [])
@@ -66,13 +64,13 @@ const App = (props) => {
         setAuthor('')
         setUrl('')
       }).catch(error => {
-          setErrorMessage(`Can't add blog: ${error.message}`)
-          setTimeout(() => {
+        setErrorMessage(`Can't add blog: ${error.message}`)
+        setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
       }).finally(() => {
-          setErrorMessage(`Blog added ${blogObject.title} ${blogObject.author}`)
-          setTimeout(() => {
+        setErrorMessage(`Blog added ${blogObject.title} ${blogObject.author}`)
+        setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
       })
@@ -113,7 +111,7 @@ const App = (props) => {
         setErrorMessage(null)
       }, 5000)
     }
-    
+
   }
 
   const loginForm = () => (
@@ -122,7 +120,7 @@ const App = (props) => {
       <form onSubmit={handleLogin}>
         <div>
           username
-            <input
+          <input
             type="text"
             value={username}
             name="Username"
@@ -131,7 +129,7 @@ const App = (props) => {
         </div>
         <div>
           password
-            <input
+          <input
             type="password"
             value={password}
             name="Password"
@@ -146,13 +144,13 @@ const App = (props) => {
   const blogForm = () => (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
       <BlogAddForm
-          onSubmit={addBlog}
-          author={author}
-          title={title}
-          url={url}
-          handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange}
+        onSubmit={addBlog}
+        author={author}
+        title={title}
+        url={url}
+        handleTitleChange={handleTitleChange}
+        handleAuthorChange={handleAuthorChange}
+        handleUrlChange={handleUrlChange}
       />
     </Togglable>
   )
@@ -168,7 +166,7 @@ const App = (props) => {
 
     blogService
       .update(blog.id, blogObject)
-      /*
+      /* //??
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
         setTitle('')
@@ -176,37 +174,36 @@ const App = (props) => {
         setUrl('')
       })*/
       .catch(error => {
-          setErrorMessage(`Can't update blog: ${error.message}`)
-          setTimeout(() => {
+        setErrorMessage(`Can't update blog: ${error.message}`)
+        setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
       }).finally(() => {
-          setErrorMessage(`Blog updated ${blogObject.title} ${blogObject.author}`)
-          setTimeout(() => {
+        setErrorMessage(`Blog updated ${blogObject.title} ${blogObject.author}`)
+        setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
       })
   }
 
   const deleteBlog = id => {
-    // console.log('Deleting blog with id >>', id)
     if (window.confirm(`Do you really want to delete blog with id of: ${id}?`)) {
       blogService
-      .deleteBlog(id)
-      .then(response => {
-        setBlogs(blogs.filter(blog => blog.id !== id))
-      })
-      .catch(error => {
-        setErrorMessage(`Can't delete blog: ${error.message}`)
-        setTimeout(() => {
-        setErrorMessage(null)
-        }, 5000)
-      }).finally(() => {
-        setErrorMessage(`Blog deleted ${id}`)
-        setTimeout(() => {
-        setErrorMessage(null)
-        }, 5000)
-      })
+        .deleteBlog(id)
+        .then(() => {
+          setBlogs(blogs.filter(blog => blog.id !== id))
+        })
+        .catch(error => {
+          setErrorMessage(`Can't delete blog: ${error.message}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        }).finally(() => {
+          setErrorMessage(`Blog deleted ${id}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
   }
 
@@ -225,20 +222,20 @@ const App = (props) => {
           <button
             type="button"
             onClick={handleLogout}
-            >
+          >
               Logout
           </button>
           {blogForm()}
           <h2>Blogs</h2>
-            {blogs.map(blog =>
-              <Blog
-                key={blog.id}
-                blog={blog}
-                handleUpdate={updateLikes}
-                handleDelete={deleteBlog}
-                currentUserName={user.username}
-              />
-            )}
+          {blogs.map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleUpdate={updateLikes}
+              handleDelete={deleteBlog}
+              currentUserName={user.username}
+            />
+          )}
         </div>
       }
     </div>
