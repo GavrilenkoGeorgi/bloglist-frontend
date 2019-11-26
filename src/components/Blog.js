@@ -18,7 +18,7 @@ const Blog = ({ blog, handleUpdate, handleDelete, currentUserName }) => {
     <div style={blogStyle}>
       <div onClick={() => setVisible(!visible)}>
         {blog.title} {blog.author}
-        <div style={showWhenVisible}>
+        <div style={showWhenVisible} className="more-info">
           {blog.url}
           <br />
           {blog.likes} likes
