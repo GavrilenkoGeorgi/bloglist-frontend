@@ -29,7 +29,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -85,7 +85,7 @@ const App = () => {
       })
 
       window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
+        'loggedBlogAppUser', JSON.stringify(user)
       )
 
       blogService.setToken(user.token)
@@ -103,7 +103,7 @@ const App = () => {
   const handleLogout = async event => {
     event.preventDefault()
     try {
-      localStorage.removeItem('loggedBlogappUser')
+      localStorage.removeItem('loggedBlogAppUser')
       document.location.href='/'
     } catch (exception) {
       setErrorMessage('Can\'t logout')
@@ -117,7 +117,7 @@ const App = () => {
   const loginForm = () => (
     <>
       <h4>Login into application</h4>
-      <form onSubmit={handleLogin}>
+      <form data-testid="login-form" onSubmit={handleLogin}>
         <div>
           username
           <input
@@ -208,7 +208,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div data-testid="main">
       <Notification message={errorMessage} />
 
       <h2>Login</h2>
@@ -226,7 +226,7 @@ const App = () => {
               Logout
           </button>
           {blogForm()}
-          <h2>Blogs</h2>
+          <h2 className="blogs-header">Blogs</h2>
           {blogs.map(blog =>
             <Blog
               key={blog.id}
