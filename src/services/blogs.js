@@ -1,40 +1,87 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
-// this is the token!
 let token = null
 
+/**
+ * Set user auth token
+ * @param {string} newToken Current user auth token
+ */
+
 const setToken = newToken => {
-  token = `bearer ${newToken}`
-  // console.log(`Token is: ${token}`)
+	token = `bearer ${newToken}`
 }
 
-const removeToken = () => console.log('Removing from localStorage')
+// const removeToken = () => console.log('Removing from localStorage')
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+/**
+ * Get all blogs
+ */
+const getAll = async () => {
+	const response = await axios.get(baseUrl)
+	return response.data
 }
 
-const create = async newObject => {
-  const config = {
-    headers: { Authorization: token }
-  }
-  const response = await axios.post(baseUrl, newObject, config)
-  return response.data
+/**
+ * Create new blog post
+ * @param {Object} newBlog New blog post data
+ */
+const create = async newBlog => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.post(baseUrl, newBlog, config)
+	return response.data
 }
 
-const update = async (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject)
-  return request.then(response => response.data)
+/**
+ * Comment on a blog post
+ * @param {string} id Blog ID
+ * @param {Object} newComment Comment content
+ */
+
+const comment = async (id, newComment) => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.post(`${baseUrl}/${id}/comments`, newComment, config)
+	return response.data
 }
+
+/**
+ * Update blog
+ * @param {string} id Id of the blog
+ * @param {Object} updatedBlog Updated blog data
+ */
+
+const update = async (id, updatedBlog) => {
+	const request = axios.put(`${baseUrl}/${id}`, updatedBlog)
+	return request.then(response => response.data)
+}
+
+/**
+ * Add like to the blog
+ * @param {Object} blog To increase likes
+ */
+const like = async blog => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const request = axios.put(`${baseUrl}/${blog.id}`, blog, config)
+	return request.then(response => response.data)
+}
+
+/**
+ * Delete blog post
+ * @param {string} id Blog post ID
+ */
 
 const deleteBlog = async id => {
-  const config = {
-    headers: { Authorization: token }
-  }
-  const request = axios.delete(`${baseUrl}/${id}`, config)
-  return request
+	const config = {
+		headers: { Authorization: token }
+	}
+	const request = axios.delete(`${baseUrl}/${id}`, config)
+	return request.then(response => response.data)
 }
 
-export default { getAll, setToken, removeToken, create, update, deleteBlog }
+export default { getAll, setToken, create, update, deleteBlog, comment, like }
