@@ -1,149 +1,79 @@
-import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
 import Notification from './components/Notification'
+import Navigation from './components/Navigation'
 import BlogAddForm from './components/BlogAddForm'
-import blogService from './services/blogs'
-import LoginFrom from './components/LoginForm'
+import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import Blogs from './components/Blogs'
+import BlogPost from './components/BlogPost'
+import UsersList from './components/UsersList'
+import UserInfo from './components/UserInfo'
+import { setNotification } from './reducers/notificationReducer'
+import { setUserFromLocalStorage } from './reducers/userReducer'
+import './css/index.css'
 
-const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const blogFormRef = React.createRef()
-  const [notification, setNotification] = useState(null)
+const App = (props) => {
+	const blogFormRef = React.createRef()
 
-  useEffect(() => {
-    blogService
-      .getAll()
-      .then(initialBlogs => {
-        initialBlogs.sort(function (a, b) {
-          return a.likes - b.likes
-        })
-        setBlogs(initialBlogs.reverse())
-      })
-  }, [])
+	useEffect(() => {
+		if (!props.user) {
+			const loggedUserJSON = window.localStorage.getItem('loggedUserJSON')
+			if (loggedUserJSON) {
+				const loggedUser = JSON.parse(loggedUserJSON)
+				props.setUserFromLocalStorage(loggedUser)
+			} else {
+				console.log('No user!') // exception?
+			}
+		} else {
+			window.localStorage.setItem(
+				'loggedUserJSON', JSON.stringify(props.user)
+			)
+		}
+	}, [props, props.user, props.setUserFromLocalStorage])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
-  const handleLogin = (user) => {
-    window.localStorage.setItem(
-      'loggedBlogAppUser', JSON.stringify(user)
-    )
-    setUser(user)
-  }
-
-  const handleLogout = async event => {
-    event.preventDefault()
-    try {
-      window.localStorage.removeItem('loggedBlogAppUser')
-      document.location.href='/'
-    } catch (exception) {
-      setNotification({ type: 'ERROR', message: 'Can\'t logout' })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    }
-
-  }
-
-  const updateLikes = (blog) => {
-    const blogObject = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id
-    }
-
-    blogService
-      .update(blog.id, blogObject)
-      /* //??
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setTitle('')
-        setAuthor('')
-        setUrl('')
-      })*/
-      .catch(error => {
-        setNotification({ type: 'ERROR', message: `Can't update blog: ${error.message}` })
-        setTimeout(() => {
-          setNotification(null)
-        }, 5000)
-      }).finally(() => {
-        setNotification({ type: 'SUCCESS', message: `Blog updated ${blogObject.title} ${blogObject.author}` })
-        setTimeout(() => {
-          setNotification(null)
-        }, 5000)
-      })
-  }
-
-  const deleteBlog = id => {
-    if (window.confirm(`Do you really want to delete blog with id of: ${id}?`)) {
-      blogService
-        .deleteBlog(id)
-        .then(() => {
-          setBlogs(blogs.filter(blog => blog.id !== id))
-        })
-        .catch(error => {
-          setNotification({ type: 'ERROR', message: `Can't update blog: ${error.message}` })
-          setTimeout(() => {
-            setNotification(null)
-          }, 5000)
-        }).finally(() => {
-          setNotification({ type: 'SUCCESS', message: `Blog deleted ${id}` })
-          setTimeout(() => {
-            setNotification(null)
-          }, 5000)
-        })
-    }
-  }
-
-  if (!user) {
-    return (
-      <div data-testid="main">
-        <Notification {...notification} />
-        <LoginFrom
-          setUser={handleLogin}
-          onError={message => setNotification({ type: 'ERROR', message })}
-        />
-      </div>
-    )
-  } else {
-    return (
-      <div data-testid="main">
-        <Notification {...notification} />
-        <p>
-          {user.name} logged in
-        </p>
-        <button
-          type="button"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-        <h2 className="blogs-header">Blogs</h2>
-        <Togglable buttonLabel="new blog" ref={blogFormRef}>
-          <BlogAddForm blogs={blogs} setBlogs={setBlogs} notificationCallback={setNotification} />
-        </Togglable>
-        {blogs.map(blog =>
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleUpdate={updateLikes}
-            handleDelete={deleteBlog}
-            currentUserName={user.username}
-          />
-        )}
-      </div>
-    )
-  }
+	return (
+		<div data-testid="main">
+			<Router>
+				<Notification />
+				<h1>Blogs app.</h1>
+				{props.user ? (
+					<div>
+						<Navigation />
+						<Route path="/login" render={() => <LoginForm />} />
+						<Route exact path="/" render={() =>
+							<Togglable buttonLabel="new blog" ref={blogFormRef}>
+								{<BlogAddForm />}
+							</Togglable>} />
+						<Route exact path="/users" render={() => <UsersList />} />
+						<Route exact path="/users/:id" render={({ match }) =>
+							<UserInfo userId={match.params.id} />
+						} />
+						<Route exact path="/blogs" render={() => <Blogs />} />
+						<Route exact path="/blogs/:id" render={({ match }) =>
+							<BlogPost blogId={match.params.id} />
+						} />
+					</div>
+				) : <LoginForm />}
+			</Router>
+		</div>
+	)
 }
 
-export default App
+const mapStateToProps = (state) => {
+	return {
+		user: state.user
+	}
+}
+
+const mapDispatchToProps = {
+	setUserFromLocalStorage,
+	setNotification
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(App)
