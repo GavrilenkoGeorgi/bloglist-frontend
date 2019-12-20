@@ -17,6 +17,7 @@ const Logout = ({ setNotification }) => {
 
 	return <button
 		type="button"
+		data-cy="logoutBtn"
 		onClick={handleLogout}>
 		Logout
 	</button>

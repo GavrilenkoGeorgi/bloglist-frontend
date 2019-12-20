@@ -20,9 +20,10 @@ const blogsReducer = (state = [], action) => {
 		)
 	}
 	case 'ADD_LIKE': {
-		console.log('Action data: ', action.data)
+		const updatedBlog = action.data
+		updatedBlog.likes++
 		return state.map(blog =>
-			blog.id !== action.data.id ? blog : action.data
+			blog.id !== action.data.id ? blog : updatedBlog
 		)
 	}
 	default:
@@ -56,7 +57,7 @@ export const deleteBlog = id => {
  */
 
 export const addLike = (blog) => {
-	console.log('Blog sent: ', blog)
+	console.log('Blog sent in reducer: ', blog)
 	return async dispatch => {
 		const updatedBlog = await blogsService.like(blog)
 		console.log('Updated blog: ', updatedBlog)

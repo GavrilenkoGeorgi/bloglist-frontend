@@ -6,7 +6,7 @@ const User = ({ userData }) => {
 		<div>
 			<span>
 				<Link to={`/users/${userData.id}`}>
-					{ userData.name }
+					{ userData.username }
 				</Link>&nbsp;
 			</span>
 			<span>

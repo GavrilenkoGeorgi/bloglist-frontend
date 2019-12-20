@@ -10,7 +10,7 @@ const Navigation = ({ user }) => {
 			<Link to="/">home</Link>
 			<Link to="/users">users</Link>
 			<Link to="/blogs">blogs</Link>
-			{user.name} logged in
+			{user.username} logged in
 			<Logout />
 		</>
 	)

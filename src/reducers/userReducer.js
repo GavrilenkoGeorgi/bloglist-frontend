@@ -11,10 +11,10 @@ const userReducer = (state = null, action) => {
 	}
 }
 
-export const login = ({ username, password }) => {
+export const login = ({ email, password }) => {
 	return async dispatch => {
 		const user = await loginService.login({
-			username,
+			email,
 			password
 		})
 		dispatch({
