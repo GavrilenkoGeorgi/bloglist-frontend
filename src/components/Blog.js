@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -8,19 +8,18 @@ import blogService from '../services/blogs'
 
 const Blog = ({ blog, ...props }) => {
 	const blogStyle = { // ??
-		paddingTop: 10,
-		paddingLeft: 2,
 		border: 'solid',
 		borderWidth: 1,
-		marginBottom: 5
+		padding: 5,
+		margin: 5
 	}
 
 	useEffect(() => {
 		blogService.setToken(props.user.token)
 	}, [props.user])
 
-	const [visible, setVisible] = useState(false)
-	const showWhenVisible = { display: visible ? '' : 'none' }
+	// const [visible, setVisible] = useState(false)
+	// const showWhenVisible = { display: visible ? '' : 'none' }
 
 	/**
 	* Handle blog delete
@@ -40,12 +39,12 @@ const Blog = ({ blog, ...props }) => {
 
 	return (
 		<div style={blogStyle}>
-			<div onClick={() => setVisible(!visible)}>
+			<div>
 				<Link to={`/blogs/${blog.id}`}>
 					{blog.title}
 				</Link>
 				{blog.author}
-				<div style={showWhenVisible} className="more-info">
+				<div className="more-info">
 					{blog.url}
 					<br />
 					{blog.likes} likes
@@ -57,7 +56,7 @@ const Blog = ({ blog, ...props }) => {
 					<br />
 						Author id is: {blog.user.username} <br />
 						Current user id is: { props.user.username} <br />
-					{props.user.username === blog.user.username &&
+					{props.user.id === blog.user.id &&
 						<button type="button" onClick={() => handleDelete(blog.id)}>
 							delete
 						</button>

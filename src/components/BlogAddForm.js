@@ -28,15 +28,17 @@ const BlogAddForm = (props) => {
 		}
 
 		props.createBlog(blogObject)
-			.catch(error => {
-				props.setNotification(error.message, 5)
-			})
-			.finally(() => {
-				resetTitle('')
-				resetAuthor('')
-				resetUrl('')
+			.then(() => {
 				props.setNotification('Blog added', 5)
 			})
+			.catch(error => {
+				// const notification = JSON.parse(error.request.responseText)
+				console.log(error)
+				props.setNotification(error.message, 5)
+			})
+		resetTitle('')
+		resetAuthor('')
+		resetUrl('')
 	}
 
 	return (
@@ -45,17 +47,20 @@ const BlogAddForm = (props) => {
 			<form onSubmit={addBlog}>
 				<label>Title</label>
 				<input
+					data-cy="newTitle"
 					{...title}
 				/><br />
 				<label>Author</label>
 				<input
+					data-cy="newAuthor"
 					{...author}
 				/><br />
 				<label>Url</label>
 				<input
+					data-cy="newUrl"
 					{...url}
 				/><br />
-				<button type="submit">create</button>
+				<button data-cy="createBlog" type="submit">create</button>
 			</form>
 		</div>
 	)

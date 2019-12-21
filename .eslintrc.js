@@ -6,7 +6,8 @@ module.exports = {
   },
   "extends": [ 
       "eslint:recommended",
-      "plugin:react/recommended"
+      "plugin:react/recommended",
+      "plugin:cypress/recommended"
   ],
   "parserOptions": {
       "ecmaFeatures": {
@@ -18,7 +19,8 @@ module.exports = {
   "plugins": [
       "react",
       "jest",
-      "react-hooks"
+      "react-hooks",
+      "html"
   ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",

@@ -1,39 +1,49 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { useField } from '../hooks'
-import { login } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import usersService from '../services/usersList' // users!
 
-const LoginForm = (props) => {
+const SignUp = (props) => {
+	const { reset : resetName, ...username } = useField('text')
 	const { reset : resetEmail, ...email } = useField('email')
 	const { reset : resetPass, ...password } = useField('password')
 
-	const handleLogin = async event => {
+	const handleSignUp = async event => {
 		event.preventDefault()
 		const userCreds = {
 			email: email.value,
+			username: username.value,
 			password : password.value
 		}
-		props.login(userCreds)
+		usersService.signUp(userCreds)
 			.then(() => {
-				props.setNotification('Logged in successfully', 5)
+				props.setNotification('Signup successful', 5)
+				resetName('')
+				resetEmail('')
+				resetPass('')
+				document.location.href='/'
 			})
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)
 				props.setNotification(notification.error, 5)
 			})
-			resetEmail('')
-			resetPass('')
 	}
 
-	return <form data-cy="loginForm" onSubmit={handleLogin}>
-		<h4>Login into application</h4>
+	return <form data-cy="signUpForm" onSubmit={handleSignUp}>
+		<h4>New user sign up</h4>
 		<div>
 			email
 			<input
 				{...email}
 				name="email"
-				data-cy="emailInput"
+			/>
+		</div>
+		<div>
+			username
+			<input
+				{...username}
+				name="name"
 			/>
 		</div>
 		<div>
@@ -41,10 +51,9 @@ const LoginForm = (props) => {
 			<input
 				{...password}
 				name="password"
-				data-cy="passwordInput"
 			/>
 		</div>
-		<button type="submit" data-cy="login">login</button>
+		<button type="submit" data-cy="signup">sign up</button>
 	</form>
 }
 
@@ -55,11 +64,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-	login,
 	setNotification
 }
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(LoginForm)
+)(SignUp)
