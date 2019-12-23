@@ -1,16 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Alert } from 'react-bootstrap'
 
-const Notification = ({ notification }) => {
-	const style = {
-		border: 'solid',
-		padding: 10,
-		borderWidth: 1
-	}
+/**
+ * Set notification
+ * @param {string} notification text
+ */
+
+const Notification = ({ notification }) => { // type?
 	return (
-		<div hidden={!notification} style={style}>
-			{notification}
-		</div>
+		<>
+		{(notification &&
+			<Alert variant="success">
+				{notification}
+			</Alert>
+		)}
+		</>
 	)
 }
 

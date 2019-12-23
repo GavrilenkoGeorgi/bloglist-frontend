@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { useField } from '../hooks'
 import { login } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const LoginForm = (props) => {
 	const { reset : resetEmail, ...email } = useField('email')
@@ -26,26 +27,28 @@ const LoginForm = (props) => {
 			resetPass('')
 	}
 
-	return <form data-cy="loginForm" onSubmit={handleLogin}>
-		<h4>Login into application</h4>
-		<div>
-			email
-			<input
-				{...email}
-				name="email"
-				data-cy="emailInput"
-			/>
-		</div>
-		<div>
-			password
-			<input
-				{...password}
-				name="password"
-				data-cy="passwordInput"
-			/>
-		</div>
-		<button type="submit" data-cy="login">login</button>
-	</form>
+	return (
+		<>
+			<h4>Login into application</h4>
+			<Form data-cy="loginForm" onSubmit={handleLogin}>
+				<Form.Group>
+					<Form.Label>email</Form.Label>
+					<Form.Control
+						name="email"
+						data-cy="emailInput"
+						{...email}
+					/>
+					<Form.Label>password</Form.Label>
+					<Form.Control
+						name="password"
+						data-cy="passwordInput"
+						{...password}
+					/>
+				<Button type="submit" variant="primary" data-cy="login">login</Button>
+				</Form.Group>
+			</Form>
+	</>
+	)
 }
 
 const mapStateToProps = (state) => {
