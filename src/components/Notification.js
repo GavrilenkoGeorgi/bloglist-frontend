@@ -8,10 +8,11 @@ import { Alert } from 'react-bootstrap'
  */
 
 const Notification = ({ notification }) => { // type?
+	const currentType = 'success'
 	return (
 		<>
 		{(notification &&
-			<Alert variant="success">
+			<Alert className="my-3" variant={currentType}>
 				{notification}
 			</Alert>
 		)}

@@ -13,14 +13,12 @@ const Blogs = ( { blogs, ...props }) => {
 	return (
 		<>
 			<h2>Blogs</h2>
-			<ul>
-				{blogs.map(blog =>
-					<Blog
-						key={blog.id}
-						blog={blog}
-					/>
-				)}
-			</ul>
+			{blogs.map(blog =>
+				<Blog
+					key={blog.id}
+					blog={blog}
+				/>
+			)}
 		</>
 	)
 }

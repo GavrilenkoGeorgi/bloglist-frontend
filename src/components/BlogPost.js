@@ -11,15 +11,13 @@ const BlogPost = ({ blog, ...props }) => {
 	if (!blog) {
 		props.initializeBlogs()
 		return (
-			<>just a sec..</>
+			<em className="text-muted">just a sec..</em>
 		)
 	} else {
 		return (
 			<>
-				<h2>Single blog!</h2>
-				<p>
-					{blog.title} - <strong>{blog.author}</strong>
-				</p>
+				<h2>{blog.title}</h2>
+					<strong><em className="text-muted">{blog.author}</em></strong>
 				<div>
 					<CommentForm blogId={blog.id} />
 					<h3>Comments</h3>

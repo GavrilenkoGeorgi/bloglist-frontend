@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { useField } from '../hooks'
 import { setNotification } from '../reducers/notificationReducer'
 import usersService from '../services/usersList' // users!
+import { Form, Button } from 'react-bootstrap'
 
 const SignUp = (props) => {
 	const { reset : resetName, ...username } = useField('text')
@@ -30,31 +31,41 @@ const SignUp = (props) => {
 			})
 	}
 
-	return <form data-cy="signUpForm" onSubmit={handleSignUp}>
-		<h4>New user sign up</h4>
-		<div>
-			email
-			<input
-				{...email}
-				name="email"
-			/>
-		</div>
-		<div>
-			username
-			<input
-				{...username}
-				name="name"
-			/>
-		</div>
-		<div>
-			password
-			<input
-				{...password}
-				name="password"
-			/>
-		</div>
-		<button type="submit" data-cy="signup">sign up</button>
-	</form>
+	return (
+		<>
+			<h4>New user sign up</h4>
+			<Form data-cy="signUpForm" onSubmit={handleSignUp}>
+				<Form.Group>
+					<Form.Label>email</Form.Label>
+						<Form.Control
+							name="email"
+							data-cy="inputRegEmail"
+							{...email}
+						/>
+					<Form.Label>username</Form.Label>
+					<Form.Control
+							name="name"
+							data-cy="inputUserName"
+							{...username}
+						/>
+					<Form.Label>password</Form.Label>
+					<Form.Control
+							name="password"
+							data-cy="inputRegPass"
+							{...password}
+						/>
+					<Button
+						className="my-3"
+						variant="primary"
+						type="submit"
+						data-cy="signupBtn"
+					>
+						sign up
+					</Button>
+				</Form.Group>
+			</Form>
+		</>
+		)
 }
 
 const mapStateToProps = (state) => {

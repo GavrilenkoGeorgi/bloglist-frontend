@@ -20,8 +20,9 @@ const LoginForm = (props) => {
 				props.setNotification('Logged in successfully', 5)
 			})
 			.catch(error => {
-				const notification = JSON.parse(error.request.responseText)
-				props.setNotification(notification.error, 5)
+				console.log('Error', error)
+				// const notification = JSON.parse(error.request.responseText)
+				// props.setNotification(notification.error, 5)
 			})
 			resetEmail('')
 			resetPass('')
@@ -44,7 +45,7 @@ const LoginForm = (props) => {
 						data-cy="passwordInput"
 						{...password}
 					/>
-				<Button type="submit" variant="primary" data-cy="login">login</Button>
+				<Button className="my-3" type="submit" variant="primary" data-cy="loginBtn">login</Button>
 				</Form.Group>
 			</Form>
 	</>

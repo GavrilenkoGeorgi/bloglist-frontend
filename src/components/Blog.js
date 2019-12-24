@@ -5,15 +5,9 @@ import PropTypes from 'prop-types'
 import { addLike, deleteBlog } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import blogService from '../services/blogs'
+import { Card, Button } from 'react-bootstrap'
 
 const Blog = ({ blog, ...props }) => {
-	const blogStyle = { // ??
-		border: 'solid',
-		borderWidth: 1,
-		padding: 5,
-		margin: 5
-	}
-
 	useEffect(() => {
 		blogService.setToken(props.user.token)
 	}, [props.user])
@@ -38,32 +32,34 @@ const Blog = ({ blog, ...props }) => {
 	}
 
 	return (
-		<div style={blogStyle}>
-			<div>
-				<Link to={`/blogs/${blog.id}`}>
-					{blog.title}
-				</Link>
-				{blog.author}
-				<div className="more-info">
+		<Card>
+
+			<Card.Body>
+
+				<Card.Title>
+					<Link to={`/blogs/${blog.id}`}>
+						{blog.title}
+					</Link>
+				</Card.Title>
+				<Card.Subtitle>
+					{blog.author}
+				</Card.Subtitle>
+				<Card.Text>
+					added by {blog.author}
+				</Card.Text>
 					{blog.url}
 					<br />
 					{blog.likes} likes
-					<button type="button" onClick={() => props.addLike(blog)}>
+					<Button className="ml-2" type="button" variant="primary" onClick={() => props.addLike(blog)}>
 						like
-					</button>
-					<br />
-						added by {blog.author}
-					<br />
-						Author id is: {blog.user.username} <br />
-						Current user id is: { props.user.username} <br />
+					</Button>
 					{props.user.id === blog.user.id &&
-						<button type="button" onClick={() => handleDelete(blog.id)}>
+						<Button className="ml-2" type="button" variant="outline-secondary" onClick={() => handleDelete(blog.id)}>
 							delete
-						</button>
+						</Button>
 					}
-				</div>
-			</div>
-		</div>
+			</Card.Body>
+		</Card>
 	)}
 
 Blog.propTypes = {

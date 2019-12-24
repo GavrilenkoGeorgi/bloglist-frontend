@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import User from './User'
 import { getUsersList } from '../reducers/usersReducer'
+import { ListGroup } from 'react-bootstrap'
 
 const UsersList = (props) => {
 	useEffect(() => {
@@ -11,17 +12,21 @@ const UsersList = (props) => {
 
 	if (props.users) {
 		return (
-			<div>
+			<>
 				<h3>Users</h3>
-				<ul>
-					{props.users.map(user =>
-						<User
-							key={user.id}
-							userData={user}
-						/>
-					)}
-				</ul>
-			</div>
+				<ListGroup variant="flush">
+						{props.users.map(user =>
+							<ListGroup.Item
+								key={user.id}
+							>
+							<User
+								key={user.id}
+								userData={user}
+							/>
+							</ListGroup.Item>
+						)}
+				</ListGroup>
+			</>
 		)
 	} else return (
 		<h4>just a sec..</h4>

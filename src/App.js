@@ -43,10 +43,9 @@ const App = (props) => {
 			<NavigationBar />
 			<Container role="main" data-cy="mainContainer">
 				<Notification />
-				<h1>Blogs app.</h1>
 				{props.user
 					? (
-						<div>
+						<>
 							<Route path="/login" render={() => <LoginForm />} />
 							<Route exact path="/" render={() =>
 								<Togglable buttonLabel="new blog" dataCy="addBlogFormToggle" ref={blogFormRef}>
@@ -60,7 +59,7 @@ const App = (props) => {
 							<Route exact path="/blogs/:id" render={({ match }) =>
 								<BlogPost blogId={match.params.id} />
 							} />
-						</div>
+						</>
 					) :
 						<>
 							<LoginForm />
