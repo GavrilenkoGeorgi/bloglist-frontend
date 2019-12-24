@@ -57,10 +57,8 @@ export const deleteBlog = id => {
  */
 
 export const addLike = (blog) => {
-	console.log('Blog sent in reducer: ', blog)
 	return async dispatch => {
 		const updatedBlog = await blogsService.like(blog)
-		console.log('Updated blog: ', updatedBlog)
 		dispatch ({
 			type: 'ADD_LIKE',
 			data: updatedBlog

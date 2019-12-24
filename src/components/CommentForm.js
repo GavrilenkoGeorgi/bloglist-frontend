@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { useField } from '../hooks'
 import { comment } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const CommentForm = (props) => {
 	const { reset : resetComment, ...comment } = useField('text')
@@ -22,16 +23,22 @@ const CommentForm = (props) => {
 		resetComment('')
 	}
 
-	return <form data-testid="comment-form" onSubmit={handleComment}>
-		<div>
-			Your comment:
-			<input
+	return (
+		<Form
+			data-cy="commentForm"
+			onSubmit={handleComment}
+		>
+		<Form.Group>
+			<Form.Label className="my-3">Your comment</Form.Label>
+			<Form.Control
+				data-cy="commentInput"
 				{...comment}
 			/>
-		</div>
-		<button type="submit">Comment</button>
-	</form>
-}
+			<Button className="my-3" variant="primary" type="submit">Comment</Button>
+		</Form.Group>
+	</Form>
+	)
+	}
 
 const mapStateToProps = (state) => {
 	return {

@@ -8,27 +8,28 @@ import { Navbar, Nav } from 'react-bootstrap'
 const NavigationBar = ({ user }) => {
 	return (
 		<header>
-			<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+			<Navbar collapseOnSelect expand="lg" bg="light">
+				<Navbar.Brand href="/">Blog app</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
-					<Nav className="">
+					<Nav className="ml-auto pl-2 d-flex align-items-left">
 
-						<Nav.Link href="#" as="span">
-							<Link to="/">home</Link>
-						</Nav.Link>
-
-						<Nav.Link href="#" as="span">
-							<Link to="/users">users</Link>
-						</Nav.Link>
+							<Link to="/users" className="d-flex align-items-center">
+								<Nav.Link href="#" as="span">
+									Users
+								</Nav.Link>
+							</Link>
 							
-						<Nav.Link href="#" as="span">
-							<Link to="/blogs">blogs</Link>
-						</Nav.Link>
+							<Link to="/blogs" className="d-flex align-items-center">
+								<Nav.Link href="#" as="span">
+									Blogs
+								</Nav.Link>
+							</Link>
 
-						<Nav.Link href="#" as="span">
+						<Nav.Link className="d-flex justify-content-end" href="#" as="span">
 							{user
 								? <>
-										<em>
+										<em className="d-flex align-items-center">
 											{user.username} logged in
 										</em>
 										<Logout />

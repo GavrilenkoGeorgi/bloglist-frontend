@@ -4,6 +4,7 @@ import { useField } from '../hooks'
 import { createBlog } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import blogService from '../services/blogs'
+import { Container, Form, Button } from 'react-bootstrap'
 
 const BlogAddForm = (props) => {
 	// eslint-disable-next-line no-unused-vars
@@ -32,9 +33,8 @@ const BlogAddForm = (props) => {
 				props.setNotification('Blog added', 5)
 			})
 			.catch(error => {
-				// const notification = JSON.parse(error.request.responseText)
-				console.log(error)
-				props.setNotification(error.message, 5)
+				const notification = JSON.parse(error.request.responseText)
+				props.setNotification(notification.error, 5) // this one!
 			})
 		resetTitle('')
 		resetAuthor('')
@@ -42,27 +42,36 @@ const BlogAddForm = (props) => {
 	}
 
 	return (
-		<div>
+		<Container>
 			<h2>Blog add form</h2>
-			<form onSubmit={addBlog}>
-				<label>Title</label>
-				<input
-					data-cy="newTitle"
-					{...title}
-				/><br />
-				<label>Author</label>
-				<input
-					data-cy="newAuthor"
-					{...author}
-				/><br />
-				<label>Url</label>
-				<input
-					data-cy="newUrl"
-					{...url}
-				/><br />
-				<button data-cy="createBlog" type="submit">create</button>
-			</form>
-		</div>
+			<Form data-cy="addBlogForm" onSubmit={addBlog}>
+				<Form.Group>
+					<Form.Label>Title</Form.Label>
+					<Form.Control
+						data-cy="newTitle"
+						{...title}
+					/>
+					<Form.Label>Author</Form.Label>
+					<Form.Control
+						data-cy="newAuthor"
+						{...author}
+					/>
+					<Form.Label>Url</Form.Label>
+					<Form.Control
+						data-cy="newUrl"
+						{...url}
+					/>
+					<Button
+						className="my-3"
+						data-cy="createBlogBtn"
+						type="submit"
+						variant="primary"
+					>
+						create
+					</Button>
+				</Form.Group>
+			</Form>
+		</Container>
 	)
 }
 
