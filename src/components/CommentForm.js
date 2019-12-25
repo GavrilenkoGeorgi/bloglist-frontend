@@ -34,7 +34,14 @@ const CommentForm = (props) => {
 				data-cy="commentInput"
 				{...comment}
 			/>
-			<Button className="my-3" variant="primary" type="submit">Comment</Button>
+			<Button
+				className="my-3"
+				variant="primary"
+				type="submit"
+				data-cy="commentBtn"
+			>
+				Comment
+			</Button>
 		</Form.Group>
 	</Form>
 	)
