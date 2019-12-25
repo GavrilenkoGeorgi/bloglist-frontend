@@ -20,11 +20,15 @@ module.exports = {
       "react",
       "jest",
       "react-hooks",
-      "html"
+      "html",
+      "cypress"
   ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "cypress/no-assigning-return-values": "error",
+    "cypress/no-unnecessary-waiting": "error",
+    "cypress/assertion-before-screenshot": "warn",
     "indent": [
         "error",
         "tab"
