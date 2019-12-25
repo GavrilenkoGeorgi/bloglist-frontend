@@ -37,7 +37,10 @@ const Blog = ({ blog, ...props }) => {
 			<Card.Body>
 
 				<Card.Title>
-					<Link to={`/blogs/${blog.id}`}>
+					<Link
+						to={`/blogs/${blog.id}`}
+						data-cy="blogTitleLink"
+					>
 						{blog.title}
 					</Link>
 				</Card.Title>
@@ -50,7 +53,13 @@ const Blog = ({ blog, ...props }) => {
 					{blog.url}
 					<br />
 					{blog.likes} likes
-					<Button className="ml-2" type="button" variant="primary" onClick={() => props.addLike(blog)}>
+					<Button
+						className="ml-2"
+						type="button"
+						variant="primary"
+						onClick={() => props.addLike(blog)}
+						data-cy="likeBtn"
+					>
 						like
 					</Button>
 					{props.user.id === blog.user.id &&
