@@ -12,16 +12,16 @@ describe('Blog app ', function() {
 
 	it('front page can be opened', function() {
 		cy.visit('http://localhost:3000')
-		cy.contains('Blogs app')
+		cy.contains('Blog app')
 	})
 
 	describe('when logged in', function() {
 		beforeEach(function() {
 			cy.get('[data-cy="emailInput"]')
-			.type('hank@aol.com')
+				.type('hank@aol.com')
 			cy.get('[data-cy="passwordInput"]')
 				.type('Propane1')
-			cy.get('[data-cy=login]').click()
+			cy.get('[data-cy=loginBtn]').click()
 		})
 
 		it('name of the user is shown', function() {
@@ -36,7 +36,7 @@ describe('Blog app ', function() {
 			.type('Test title')
 			cy.get('[data-cy=newUrl')
 			.type('url.com')
-			cy.get('[data-cy=createBlog').click()
+			cy.get('[data-cy=createBlogBtn').click()
 			cy.visit('http://localhost:3000/blogs')
 			cy.contains('Cypress test title')
 		})
