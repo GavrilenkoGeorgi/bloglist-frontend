@@ -4,10 +4,13 @@ import { useField } from '../hooks'
 import { login } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { Form, Button } from 'react-bootstrap'
+import Togglable from './Togglable'
+import SignUp from './SignUp'
 
 const LoginForm = (props) => {
 	const { reset : resetEmail, ...email } = useField('email')
 	const { reset : resetPass, ...password } = useField('password')
+	const signUpRef = React.createRef()
 
 	const handleLogin = async event => {
 		event.preventDefault()
@@ -18,6 +21,7 @@ const LoginForm = (props) => {
 		props.login(userCreds)
 			.then(() => {
 				props.setNotification('Logged in successfully', 5)
+				document.location.href='/'
 			})
 			.catch(error => {
 				console.log('Error', error)
@@ -48,6 +52,9 @@ const LoginForm = (props) => {
 				<Button className="my-3" type="submit" variant="primary" data-cy="loginBtn">login</Button>
 				</Form.Group>
 			</Form>
+			<Togglable buttonLabel="sign up" dataCy="signUp" ref={signUpRef}>
+				<SignUp />
+			</Togglable>
 	</>
 	)
 }

@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
 import Notification from './components/Notification'
 import NavigationBar from './components/NavigationBar'
 import BlogAddForm from './components/BlogAddForm'
 import LoginForm from './components/LoginForm'
-import SignUp from './components/SignUp'
 import Togglable from './components/Togglable'
 import Footer from './components/Footer'
 import Blogs from './components/Blogs'
@@ -19,7 +18,7 @@ import { Container } from 'react-bootstrap'
 
 const App = (props) => {
 	const blogFormRef = React.createRef()
-	const signUpRef = React.createRef()
+	// const signUpRef = React.createRef()
 
 	useEffect(() => {
 		if (!props.user) {
@@ -43,31 +42,34 @@ const App = (props) => {
 			<NavigationBar />
 			<Container role="main" data-cy="mainContainer">
 				<Notification />
-				{props.user
-					? (
+				<Route path="/login" render={() => <LoginForm />} />
+
+				{/* Routes */}
+					<Route exact path="/users" render={() =>
+						props.user ? <UsersList /> : <Redirect to="/login" />
+					} />
+
+					<Route exact path="/users/:id" render={({ match }) =>
+						props.user ? <UserInfo userId={match.params.id} /> : <Redirect to="/login" />
+					} />
+
+					<Route exact path="/" render={() =>
+						props.user ?
 						<>
-							<Route path="/login" render={() => <LoginForm />} />
-							<Route exact path="/" render={() =>
-								<Togglable buttonLabel="new blog" dataCy="addBlogFormToggle" ref={blogFormRef}>
-									<BlogAddForm />
-								</Togglable>} />
-							<Route exact path="/users" render={() => <UsersList />} />
-							<Route exact path="/users/:id" render={({ match }) =>
-								<UserInfo userId={match.params.id} />
-							} />
-							<Route exact path="/blogs" render={() => <Blogs />} />
-							<Route exact path="/blogs/:id" render={({ match }) =>
-								<BlogPost blogId={match.params.id} />
-							} />
-						</>
-					) :
-						<>
-							<LoginForm />
-								<Togglable buttonLabel="sign up" dataCy="signUp" ref={signUpRef}>
-								<SignUp />
+							<Togglable buttonLabel="new blog" dataCy="addBlogFormToggle" ref={blogFormRef}>
+								<BlogAddForm />
 							</Togglable>
 						</>
-				}
+						: <div>Login or sign up to add something</div>
+					} />
+
+					<Route exact path="/blogs" render={() => <Blogs />} />
+
+					<Route exact path="/blogs/:id" render={({ match }) =>
+						<BlogPost blogId={match.params.id} />
+					} />
+				{/* Routes end */}
+
 				</Container>
 				<Footer />
 			</Router>
