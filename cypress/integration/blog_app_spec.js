@@ -1,13 +1,7 @@
 describe('Blog app ', function() {
 	beforeEach(function() {
 		cy.request('POST', '/api/testing/reset')
-		const user = {
-			email: Cypress.env('email'),
-			username: Cypress.env('username'),
-			password: Cypress.env('password')
-		}
-		// create test user
-		cy.request('POST', '/api/users', user)
+		cy.createUser()
 	})
 
 	it('logs in programmatically without using the UI', function () {
@@ -19,14 +13,23 @@ describe('Blog app ', function() {
 		.should('equal', 200)
 	})
 
+	it('logs in with a custom command', function () {
+		cy.login().its('status').should('equal', 200)
+	})
+
+	it('fails to access protected resource', () => {
+		cy.request({
+			url: 'http://localhost:3003/api/users', // This?
+			failOnStatusCode: false,
+		})
+		.its('status')
+		.should('equal', 401)
+	})
+
 	describe('when logged in', function() {
-		beforeEach(function() {
-			cy.visit('/login')
-			cy.get('[data-cy=emailInput]')
-				.type('hank@aol.com')
-			cy.get('[data-cy=passwordInput]')
-				.type('Propane1')
-			cy.get('[data-cy=loginBtn]').click().wait(500)
+		beforeEach(() => {
+			cy.login()
+			cy.visit('/')
 		})
 
 		it('name of the user is shown', function() {
