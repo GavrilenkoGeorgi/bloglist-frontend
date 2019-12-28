@@ -4,23 +4,28 @@ import Blog from './Blog'
 import { initializeBlogs } from '../reducers/blogsReducer'
 
 const Blogs = ( { blogs, ...props }) => {
-
 	useEffect(() => {
 		props.initializeBlogs()
 		// eslint-disable-next-line
 	}, [])
 
-	return (
-		<>
-			<h2>Blogs</h2>
-			{blogs.map(blog =>
-				<Blog
-					key={blog.id}
-					blog={blog}
-				/>
-			)}
-		</>
-	)
+	if (blogs) {
+		return (
+			<>
+				<h2>Blogs</h2>
+				{blogs.map(blog =>
+					<Blog
+						key={blog.id}
+						blog={blog}
+					/>
+				)}
+			</>
+		)
+	} else {
+		return (
+			<h4>just a sec..</h4>
+		)
+	}
 }
 
 const mapStateToProps = (state) => {

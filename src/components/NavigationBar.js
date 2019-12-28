@@ -8,7 +8,7 @@ import { Navbar, Nav } from 'react-bootstrap'
 const NavigationBar = ({ user }) => {
 	return (
 		<header>
-			<Navbar collapseOnSelect expand="lg" bg="light">
+			<Navbar collapseOnSelect expand="sm" bg="light">
 				<Navbar.Brand href="/">Blog app</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">

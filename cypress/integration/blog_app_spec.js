@@ -1,31 +1,39 @@
 describe('Blog app ', function() {
 	beforeEach(function() {
 		cy.request('POST', '/api/testing/reset')
-		const user = {
-			email: 'hank@aol.com',
-			username: 'Hank \'tester\' Hill',
-			password: 'Propane1'
-		}
-		cy.request('POST', '/api/users/', user)
-		cy.visit('/')
+		cy.createUser()
 	})
 
-	it('front page can be opened', function() {
-		cy.visit('/')
-		cy.contains('Blog app')
+	it('logs in programmatically without using the UI', function () {
+		cy.request('POST', '/api/login', {
+			email: Cypress.env('email'),
+			password: Cypress.env('password')
+		})
+		.its('status')
+		.should('equal', 200)
+	})
+
+	it('logs in with a custom command', function () {
+		cy.login().its('status').should('equal', 200)
+	})
+
+	it('fails to access protected resource', () => {
+		cy.request({
+			url: 'http://localhost:3003/api/users', // This?
+			failOnStatusCode: false,
+		})
+		.its('status')
+		.should('equal', 401)
 	})
 
 	describe('when logged in', function() {
-		beforeEach(function() {
-			cy.get('[data-cy=emailInput]')
-				.type('hank@aol.com')
-			cy.get('[data-cy=passwordInput]')
-				.type('Propane1')
-			cy.get('[data-cy=loginBtn]').click().wait(250)
+		beforeEach(() => {
+			cy.login()
+			cy.visit('/')
 		})
 
 		it('name of the user is shown', function() {
-			cy.contains('Hank \'tester\' Hill logged in')
+			cy.contains('Hank tester Hill logged in')
 		})
 
 		it('blog can be added and liked', function() {
@@ -36,7 +44,7 @@ describe('Blog app ', function() {
 				.type('Test title')
 			cy.get('[data-cy=newUrl]')
 				.type('url.com')
-			cy.get('[data-cy=createBlogBtn').click().wait(2000)
+			cy.get('[data-cy=createBlogBtn').click().wait(1000)
 			cy.visit('/blogs')
 			cy.contains('Cypress test title')
 			cy.get('[data-cy=likeBtn]').click().wait(1000)
@@ -64,12 +72,12 @@ describe('Blog app ', function() {
 		it('users list can be viewed', function() {
 			cy.visit('/users')
 			cy.contains('Users')
-			cy.contains('Hank \'tester\' Hill')
+			cy.contains('Hank tester Hill')
 		})
 
 		it('user can logout', function() {
 			cy.get('[data-cy=logoutBtn]').click()
-			cy.contains('Login into application')
+			cy.location('pathname').should('equal', '/')
 		})
 	})
 })

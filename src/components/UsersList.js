@@ -3,10 +3,17 @@ import { connect } from 'react-redux'
 import User from './User'
 import { getUsersList } from '../reducers/usersReducer'
 import { ListGroup } from 'react-bootstrap'
+import userService from '../services/usersList' // user??
+import { setNotification } from '../reducers/notificationReducer'
 
 const UsersList = (props) => {
 	useEffect(() => {
+		userService.setToken(props.user.token)
 		props.getUsersList()
+			.catch(error => {
+				const notification = JSON.parse(error.request.responseText)
+				props.setNotification(notification.error, 5)
+			})
 		// eslint-disable-next-line
 	}, [])
 
@@ -35,12 +42,14 @@ const UsersList = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		users: state.users
+		users: state.users,
+		user: state.user
 	}
 }
 
 const mapDispatchToProps = {
-	getUsersList
+	getUsersList,
+	setNotification
 }
 
 export default connect(
