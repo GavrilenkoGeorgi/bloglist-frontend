@@ -8,6 +8,7 @@ import { setNotification } from '../reducers/notificationReducer'
 
 const UsersList = (props) => {
 	useEffect(() => {
+		userService.setToken(props.user.token)
 		props.getUsersList()
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)
@@ -15,11 +16,6 @@ const UsersList = (props) => {
 			})
 		// eslint-disable-next-line
 	}, [])
-
-	useEffect(() => {
-		userService.setToken(props.user.token)
-		console.log('Props user token', props.user.token)
-	}, [props.user])
 
 	if (props.users) {
 		return (
