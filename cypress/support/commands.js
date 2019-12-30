@@ -49,6 +49,22 @@ Cypress.Commands.add('login', () => {
 			}
 	})
 	.then((resp) => {
-		window.localStorage.setItem('loggedUserJSON',  JSON.stringify(resp.body))
+		window.localStorage.setItem('loggedUserJSON', JSON.stringify(resp.body))
+	})
+})
+
+Cypress.Commands.add('createBlog', () => {
+	const user = JSON.parse(window.localStorage.getItem('loggedUserJSON'))
+	cy.request({
+		method: 'POST',
+		url: 'http://localhost:3000/api/blogs',
+		body: {
+			title: Cypress.env('blogTitle'),
+			author: Cypress.env('blogAuthor'),
+			url: Cypress.env('blogUrl')
+		},
+		auth: {
+			bearer: user.token
+		}
 	})
 })

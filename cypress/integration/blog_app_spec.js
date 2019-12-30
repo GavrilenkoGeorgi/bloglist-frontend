@@ -36,37 +36,40 @@ describe('Blog app ', function() {
 			cy.contains('Hank tester Hill logged in')
 		})
 
-		it('blog can be added and liked', function() {
+		it('blog can be added using UI', function() {
 			cy.get('[data-cy=addBlogFormToggle]').click()
 			cy.get('[data-cy=newTitle]')
-				.type('Cypress test title')
+				.type('UI test blog title')
 			cy.get('[data-cy=newAuthor]')
-				.type('Test title')
+				.type('UI author')
 			cy.get('[data-cy=newUrl]')
-				.type('url.com')
+				.type('gui.com')
 			cy.get('[data-cy=createBlogBtn').click().wait(1000)
 			cy.visit('/blogs')
-			cy.contains('Cypress test title')
-			cy.get('[data-cy=likeBtn]').click().wait(1000)
+			cy.contains('UI test blog title')
+		})
+
+		it('can be liked', function() {
+			cy.createBlog()
+			cy.visit('/blogs')
+			cy.get('[data-cy=likeBtn]').click()
 			cy.contains('1 likes')
 		})
 
 		it('blog comment can be added', function() {
-			// add new blog
-			cy.get('[data-cy=addBlogFormToggle]').click()
-			cy.get('[data-cy=newTitle]')
-				.type('Cypress add comment test')
-			cy.get('[data-cy=newAuthor]')
-				.type('Cypress')
-			cy.get('[data-cy=newUrl]')
-				.type('test.com')
-			cy.get('[data-cy=createBlogBtn]').click().wait(2000)
+			cy.createBlog()
 			cy.visit('/blogs')
 			cy.get('[data-cy=blogTitleLink]').click()
 			cy.get('[data-cy=commentInput]')
-				.type('Cypress test comment')
+				.type('Cypress UI test comment')
 			cy.get('[data-cy=commentBtn]').click()
-			cy.contains('Cypress test comment')
+			cy.contains('Cypress UI test comment')
+		})
+
+		it('blog can be added without using GUI', function() {
+			cy.createBlog()
+			cy.visit('/blogs')
+			cy.contains(Cypress.env('blogTitle'))
 		})
 
 		it('users list can be viewed', function() {
