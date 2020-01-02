@@ -4,27 +4,10 @@ const Footer = () => {
 	return (
 		<footer className="footer">
 			<div className="container">
-				<span className="text-muted">Place sticky footer content here.</span>
+				<span className="text-muted">React Redux blog app.</span>
 			</div>
 		</footer>
 	)
 }
-
-/*
-const mapStateToProps = (state) => {
-	return {
-		user: state.user
-	}
-}
-
-const mapDispatchToProps = {
-	setNotification
-}
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(NavigationBar)
-*/
 
 export default Footer

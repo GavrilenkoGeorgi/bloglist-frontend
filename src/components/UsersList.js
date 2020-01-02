@@ -12,7 +12,10 @@ const UsersList = (props) => {
 		props.getUsersList()
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)
-				props.setNotification(notification.error, 5)
+				props.setNotification({
+					message: notification.error,
+					variant: 'danger'
+				 }, 5)
 			})
 		// eslint-disable-next-line
 	}, [])

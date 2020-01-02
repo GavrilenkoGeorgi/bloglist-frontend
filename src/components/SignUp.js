@@ -19,7 +19,10 @@ const SignUp = (props) => {
 		}
 		usersService.signUp(userCreds)
 			.then(() => {
-				props.setNotification('Signup successful', 5)
+				props.setNotification({
+					message: 'Signup successful',
+					variant: 'success'
+				 }, 5)
 				resetName('')
 				resetEmail('')
 				resetPass('')
@@ -27,7 +30,10 @@ const SignUp = (props) => {
 			})
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)
-				props.setNotification(notification.error, 5)
+				props.setNotification({
+					message: notification.error,
+					variant: 'danger'
+				 }, 5)
 			})
 	}
 

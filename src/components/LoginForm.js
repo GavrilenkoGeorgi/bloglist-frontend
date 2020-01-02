@@ -20,13 +20,18 @@ const LoginForm = (props) => {
 		}
 		props.login(userCreds)
 			.then(() => {
-				props.setNotification('Logged in successfully', 5)
+				props.setNotification({
+					message: 'Logged in successfully',
+					variant: 'info'
+				 }, 5)
 				document.location.href='/'
 			})
 			.catch(error => {
-				console.log('Error', error)
-				// const notification = JSON.parse(error.request.responseText)
-				// props.setNotification(notification.error, 5)
+				const notification = JSON.parse(error.request.responseText)
+				props.setNotification({ 
+					message: notification.error,
+					variant: 'danger'
+				}, 5)
 			})
 			resetEmail('')
 			resetPass('')

@@ -15,10 +15,16 @@ const CommentForm = (props) => {
 			content: comment.value,
 		}
 		props.comment(newComment)
-			.then(() => props.setNotification('Comment added', 5))
+			.then(() => props.setNotification({
+				message: 'Comment added',
+				variant: 'success'
+			 }, 5))
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)
-				props.setNotification(notification.error, 5)
+				props.setNotification({
+					message: notification.error,
+					variant: 'danger'
+				}, 5)
 			})
 		resetComment('')
 	}
