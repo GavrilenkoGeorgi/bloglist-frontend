@@ -30,11 +30,13 @@ const BlogAddForm = (props) => {
 
 		props.createBlog(blogObject)
 			.then(() => {
-				props.setNotification('Blog added', 5)
+				console.log(`Setting success notification`)
+				props.setNotification({ message: 'Blog successfully added.', variant: 'success' }, 5)
 			})
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)
-				props.setNotification(notification.error, 5) // this one!
+				console.log(`Setting error notification`)
+				props.setNotification({ message: notification.error, variant: 'danger' }, 5)
 			})
 		resetTitle('')
 		resetAuthor('')

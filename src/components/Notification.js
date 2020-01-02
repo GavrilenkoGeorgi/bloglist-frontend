@@ -4,20 +4,19 @@ import { Alert } from 'react-bootstrap'
 
 /**
  * Set notification
- * @param {string} notification text
+ * @param {Object} notification Includes message and type
  */
 
-const Notification = ({ notification }) => { // type?
-	const currentType = 'success'
-	return (
-		<>
-		{(notification &&
-			<Alert className="my-3" variant={currentType}>
-				{notification}
-			</Alert>
-		)}
-		</>
-	)
+const Notification = ({ notification }) => {
+		return (
+			<>
+			{(notification.message &&
+				<Alert className="my-3" variant={notification.variant}>
+					{notification.message}
+				</Alert>
+			)}
+			</>
+		)
 }
 
 const mapStateToProps = (state) => {

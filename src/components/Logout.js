@@ -10,9 +10,16 @@ const Logout = ({ setNotification }) => {
 		try {
 			window.localStorage.removeItem('loggedUserJSON')
 			document.location.href='/'
-			setNotification('Successfully logged out.', 3)
-		} catch (exception) {
-			setNotification(exception.message, 3)
+			setNotification({ 
+				message: 'Successfully logged out.',
+				variant: 'info'
+			}, 3)
+		} catch (error) {
+			const notification = JSON.parse(error.request.responseText)
+			setNotification({
+				message: notification.error,
+				variant: 'danger',
+			}, 5)
 		}
 	}
 

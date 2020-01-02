@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
 import Logout from './Logout'
 import { Navbar, Nav } from 'react-bootstrap'
 
@@ -51,11 +50,6 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = {
-	setNotification
-}
-
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+	mapStateToProps
 )(NavigationBar)
