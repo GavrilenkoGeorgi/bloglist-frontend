@@ -24,7 +24,7 @@ describe('Login using UI', function () {
 			])
 			expect(user.token).to.be.a('string')
 		})
-	
+
 		// logout
 		cy.get('[data-cy=logoutBtn]').click()
 		cy.location('pathname').should('equal', '/')
@@ -33,7 +33,7 @@ describe('Login using UI', function () {
 	it('does not log in with invalid password', () => {
 		cy.visit('/login')
 		cy.location('pathname').should('equal', '/login')
-	
+
 		// valid email and invalid pass
 		cy.get('[data-cy=emailInput]').type(Cypress.env('email'))
 		cy.get('[data-cy=passwordInput]').type('WrongPass')
@@ -41,9 +41,8 @@ describe('Login using UI', function () {
 	
 		// still on /login page plus an error is displayed
 		cy.location('pathname').should('equal', '/login')
-	
-		/*cy.contains('.alert-danger', 'Username or password is incorrect').should(
+		cy.contains('.alert-danger', 'invalid username or password').should(
 			'be.visible'
-		)*/
+		)
 	})
 })

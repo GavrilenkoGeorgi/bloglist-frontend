@@ -49,6 +49,12 @@ describe('Blog app ', function() {
 			cy.contains('UI test blog title')
 		})
 
+		it('blog can be deleted using UI', function() {
+			cy.createBlog()
+			cy.visit('/blogs')
+			cy.contains(Cypress.env('blogTitle')).should('not.exist')
+		})
+
 		it('can be liked', function() {
 			cy.createBlog()
 			cy.visit('/blogs')
