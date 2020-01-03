@@ -18,7 +18,6 @@ import { Container } from 'react-bootstrap'
 
 const App = (props) => {
 	const blogFormRef = React.createRef()
-	// const signUpRef = React.createRef()
 
 	useEffect(() => {
 		if (!props.user) {
@@ -40,7 +39,7 @@ const App = (props) => {
 		<>
 			<Router>
 			<NavigationBar />
-			<Container role="main" data-cy="mainContainer">
+			<Container role="main" data-cy="mainContainer" data-test="main">
 				<Notification />
 				<Route path="/login" render={() => <LoginForm />} />
 

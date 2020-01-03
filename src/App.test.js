@@ -1,42 +1,25 @@
 import React from 'react'
-import { render, waitForElement } from '@testing-library/react'
+import { Provider } from 'react-redux'
+import { render, waitForElement, cleanup } from '@testing-library/react'
 import App from './App'
+import store from './store'
 
-describe('<App />', () => {
-	test('if no user logged, blogs are not rendered', async () => {
+afterEach(cleanup)
+
+describe('Blog list app', () => {
+	test.only('it renders main div correctly', async () => {
 		const component = render(
-			<App />
+			<Provider store={store}>
+				<App />
+			</Provider>
 		)
-		component.rerender(<App />)
+		component.rerender(
+			<Provider store={store}>
+				<App />
+			</Provider>
+		)
 		await waitForElement(
-			() => component.getByTestId('main')
+			() => component.getByRole('main')
 		)
-
-		const loginHeader = component.getByText('Login into application')
-		const loginForm = component.getByTestId('login-form')
-		// login header is present
-		expect(loginHeader).toBeDefined()
-		// login form is defined
-		expect(loginForm).toBeDefined()
-		// no blogs header rendered
-		expect(component.container).not.toHaveTextContent('Blogs')
-	})
-
-	test('renders blogs if logged in', async () => {
-		const user = {
-			username: 'tester',
-			token: '1231231214',
-			name: 'Donald Tester'
-		}
-		localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-
-		const component = render(
-			<App />
-		)
-		component.rerender(<App />)
-		await waitForElement(
-			() => component.getByTestId('main')
-		)
-		expect(component.container).toHaveTextContent('Blogs')
 	})
 })
