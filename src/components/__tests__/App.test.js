@@ -1,8 +1,8 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { render, waitForElement, cleanup } from '@testing-library/react'
-import App from './App'
-import store from './store'
+import App from '../../App'
+import store from '../../store'
 
 afterEach(cleanup)
 

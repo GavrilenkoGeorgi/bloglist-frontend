@@ -1,7 +1,7 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import ShallowRenderer from 'react-test-renderer/shallow'
-import Basic from './Basic'
+import Basic from '../Basic'
 
 // Basic Test with React-test-renderer
 it('renders correctly react-test-renderer', () => {
