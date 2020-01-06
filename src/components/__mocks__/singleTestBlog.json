@@ -1,0 +1,12 @@
+{
+  "comments": [],
+  "title": "Single test blog title",
+  "author": "Jest",
+  "url": "some.url",
+  "likes": 0,
+  "user": {
+      "username": "Jest",
+      "id": "5dfcda4e43b3bd1e4c39ed04"
+  },
+  "id": "5e021b34a225dc2d48382541"
+}
