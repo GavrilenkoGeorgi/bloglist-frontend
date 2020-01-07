@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import TestHook from '../../hooks/TestHook.js'
+import TestHook from '../hooks/TestHook.js'
 import { render, fireEvent, cleanup } from '@testing-library/react'
-import TestParent from '../TestParent'
+import TestParent from '../components/TestParent'
 
 afterEach(cleanup)
 

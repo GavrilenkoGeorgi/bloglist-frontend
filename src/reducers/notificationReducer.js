@@ -1,5 +1,5 @@
 
-const notificationReducer = (state = { message: null, variant: null}, action) => {
+const notificationReducer = (state = { message: null, variant: null }, action) => {
 	switch (action.type) {
 		case 'SET_NOTIFICATION':
 			state = {

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import TestAxios from '../TestAxios'
+import TestAxios from '../components/TestAxios'
 import { act, render, fireEvent, cleanup, waitForElement } from '@testing-library/react'
 
 import axiosMock from 'axios'

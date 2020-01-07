@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import TestHookContext from '../TestHookContext'
+import TestHookContext from '../components/TestHookContext'
 import { act, render, fireEvent, cleanup } from '@testing-library/react'
-import TestParent from '../TestParent'
+import TestParent from '../components/TestParent'
 
-import Context from '../../store/context'
+import Context from '../store/context'
 
 afterEach(cleanup)
 

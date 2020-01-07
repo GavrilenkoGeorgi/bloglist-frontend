@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import HooksForm from '../HooksForm'
+import HooksForm from '../components/HooksForm'
 import { render, fireEvent, cleanup } from '@testing-library/react'
 
 afterEach(cleanup)

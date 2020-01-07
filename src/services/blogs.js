@@ -34,15 +34,14 @@ const create = async newBlog => {
 
 /**
  * Comment on a blog post
- * @param {string} id Blog ID
- * @param {Object} newComment Comment content
+ * @param {Object} payload Comment content and blog id
  */
 
-const comment = async (id, newComment) => {
-	const config = {
+const comment = async (payload) => {
+		const config = {
 		headers: { Authorization: token }
 	}
-	const response = await axios.post(`${baseUrl}/${id}/comments`, newComment, config)
+	const response = await axios.post(`${baseUrl}/${payload.blog.id}/comments`, payload, config)
 	return response.data
 }
 

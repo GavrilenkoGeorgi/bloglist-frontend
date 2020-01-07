@@ -1,4 +1,4 @@
-import blogsReducer from '../../reducers/blogsReducer'
+import blogsReducer from '../reducers/blogsReducer'
 import blogsData from '../__mocks__/testBlogs'
 import singleBlog from '../__mocks__/singleTestBlog'
 
@@ -53,7 +53,7 @@ describe('Blogs reducer', () => {
 	test('adds comment to the blog', () => {
 		const newComment = {
 			blog: blogsData[0].id,
-			content: 'New test comment'
+			content: 'New Jest test comment'
 		}
 
 		const newState = blogsReducer(blogsData, {
@@ -61,6 +61,9 @@ describe('Blogs reducer', () => {
 			data: newComment
 		})
 
+		// length of the comments array has increased
 		expect(newState[0].comments).toHaveLength(1)
+		// comment is added correctly
+		expect(newState[0].comments[0].content).toBe(newComment.content)
 	})
 })
