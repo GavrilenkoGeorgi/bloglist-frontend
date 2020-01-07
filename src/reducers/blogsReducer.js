@@ -9,7 +9,7 @@ const blogsReducer = (state = [], action) => {
 	case 'INIT_BLOGS':
 		return action.data
 	case 'COMMENT': {
-		const blogId = action.data.blog // ??
+		const blogId = action.data.blog // blog id returned from mongoose schema
 		const blogToChange = state.find(blog => blog.id === blogId)
 		const changedBlog = {
 			...blogToChange,
@@ -68,15 +68,15 @@ export const addLike = (blog) => {
 
 /**
  * Add comment to the blog
- * @param {string} blogId
+ * @param {Object} blog
  */
 
-export const comment = ({ blogId, ...data }) => {
+export const comment = (blog) => {
 	return async dispatch => {
-		const newComment = await blogsService.comment(blogId, data)
+		const response = await blogsService.comment(blog)
 		dispatch ({
 			type: 'COMMENT',
-			data: newComment
+			data: response
 		})
 	}
 }

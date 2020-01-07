@@ -30,12 +30,10 @@ const BlogAddForm = (props) => {
 
 		props.createBlog(blogObject)
 			.then(() => {
-				console.log(`Setting success notification`)
 				props.setNotification({ message: 'Blog successfully added.', variant: 'success' }, 5)
 			})
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)
-				console.log(`Setting error notification`)
 				props.setNotification({ message: notification.error, variant: 'danger' }, 5)
 			})
 		resetTitle('')
@@ -46,11 +44,13 @@ const BlogAddForm = (props) => {
 	return (
 		<Container>
 			<h2>Blog add form</h2>
-			<Form data-cy="addBlogForm" onSubmit={addBlog}>
+			<Form data-cy="addBlogForm" data-testid="addBlogForm" onSubmit={addBlog}>
 				<Form.Group>
 					<Form.Label>Title</Form.Label>
 					<Form.Control
 						data-cy="newTitle"
+						name="title"
+						data-testid="title"
 						{...title}
 					/>
 					<Form.Label>Author</Form.Label>

@@ -19,7 +19,7 @@ const BlogPost = ({ blog, ...props }) => {
 				<h2>{blog.title}</h2>
 					<strong><em className="text-muted">{blog.author}</em></strong>
 				<div>
-					<CommentForm blogId={blog.id} />
+					<CommentForm blog={blog} />
 					<h3>Comments</h3>
 					<ul>
 						{blog.comments.map(comment =>

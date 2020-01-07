@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import Blog from './Blog'
+import Blog from '../Blog'
 
 let component
 const blog = {
