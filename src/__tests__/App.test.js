@@ -3,54 +3,58 @@ import { Provider } from 'react-redux'
 import { render, waitForElement, fireEvent, cleanup } from '@testing-library/react'
 import App from '../App'
 import store from '../store'
+import user from '../__mocks__/testUser'
 
 afterEach(cleanup)
 
-describe('Blog list app', () => {
+describe('<App />', () => {
 	it('it renders home page correctly', async () => {
-		const component = render(
-			<Provider store={store}>
-				<App />
-			</Provider>
-		)
-		expect(component.container).toHaveTextContent(
-			'Login or sign up to add something'
-		)
-		/* what's this?
-		component.rerender(
-			<Provider store={store}>
-				<App />
-			</Provider>
-		)*/
-		/*
-		await waitForElement(
-			() => component.getByRole('main')
-		) */
-	})
-
-	it('if user is logged in, \'new blog\' button is displayed', () => {
-		// variables?
-		store.user = {
-			token: "ayJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhhbmtAYW9sLmNvbSIsImlkIjoiNWRmY2RhNGU0M2IzYmQxZTRjMzllZDA2IiwiaWF0IjoxNTc4MjM2MjgwfQ.LpHQr-0vkvKHaC-sbJ99SZx2v8aeE3YlnSfqnOl9IVQ",
-			username: "Dale 'tester' Gribble",
-			email: "dale@aol.com",
-			id: "5dfcda4e43b3bd1e4c39ed07"
-		}
-		window.localStorage.setItem(
-			'loggedUserJSON', JSON.stringify(store.user)
-		)
-
 		const { container, getByText } = render(
 			<Provider store={store}>
 				<App />
 			</Provider>
 		)
-		expect(getByText(/new/i).textContent).toBe('new blog')
+		// login link is present
+		expect(container).toHaveTextContent('login')
+		// default intro
+		expect(getByText(/Login or/i).textContent).toBe('Login or sign up to add something')
+		// footer
+		expect(getByText(/React/i).textContent).toBe('React Redux blog app.')
+	})
 
-		fireEvent.click(getByText('new blog'))
+	describe('when user is logged in', () => {
+		let app = undefined
+		beforeEach(() => {
+			window.localStorage.setItem(
+				'loggedUserJSON', JSON.stringify(user)
+			)
+			store.user = user
 
-		expect(container).toHaveTextContent(
-			'Blog add form'
-		)
+			app = render(
+				<Provider store={store}>
+					<App />
+				</Provider>
+			)
+		})
+
+		it('\'new blog\' button is visible and is clickable', () => {
+			expect(app.getByText(/new/i).textContent).toBe('new blog')
+			fireEvent.click(app.getByText('new blog'))
+			expect(app.container).toHaveTextContent(
+				'Blog add form'
+			)
+		})
+
+		it('logout button is visible', () => {
+			expect(app.container).toHaveTextContent(
+				'Logout'
+			)
+		})
+
+		it('user can logout', () => {
+			fireEvent.click(app.getByText('Logout'))
+			expect(window.localStorage.getItem('loggedUserJSON')).toBe(undefined)
+			expect(app.container).toHaveTextContent('Successfully logged out')
+		})
 	})
 })
