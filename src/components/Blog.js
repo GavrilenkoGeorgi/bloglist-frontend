@@ -6,7 +6,7 @@ import { addLike, deleteBlog } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { Card, Button } from 'react-bootstrap'
 
-const Blog = ({ blog, ...props }) => {
+const Blog = ({ blog, userId, ...props }) => {
 	/**
 	* Handle blog delete
 	* @param {string} id Blog ID
@@ -31,8 +31,8 @@ const Blog = ({ blog, ...props }) => {
 		}
 	}
 
-	const checkAuthor = (blogAuthorId) => {
-		if (props.user && (props.user.id === blogAuthorId)) {
+	const checkAuthor = () => {
+		if (userId && (userId === blog.user.id)) {
 			return true
 		}
 		return false
@@ -67,11 +67,12 @@ const Blog = ({ blog, ...props }) => {
 				>
 					like
 				</Button>
-				{ checkAuthor(blog.user.id) &&
+				{ checkAuthor() &&
 					<Button
 						className="ml-2"
 						type="button"
 						variant="outline-secondary"
+						data-cy="blogDelBtn"
 						onClick={() => handleDelete(blog.id)
 					}>
 						delete

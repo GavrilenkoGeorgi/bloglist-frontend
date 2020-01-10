@@ -1,50 +1,67 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
-import Blog from '../Blog'
+import { Provider } from 'react-redux'
+import { MemoryRouter } from 'react-router'
+import { render, fireEvent, cleanup, waitForElement } from '@testing-library/react'
+import Blog from '../components/Blog'
+import App from '../App'
+import store from '../store'
+import blog from '../__mocks__/singleTestBlog'
+import user from '../__mocks__/testUser'
 
-let component
-const blog = {
-	title: 'Component testing',
-	author: 'Hank Hill',
-	url: 'some.url',
-	likes: 1,
-	user: {
-		id: '5dce9d7559d0641eb47ffb3a'
-	}
-}
-const currentUserName = 'Hank Hill'
-const mockHandler = jest.fn()
+afterEach(cleanup)
 
-beforeEach(() => {
-	component = render(
-		<Blog
-			blog={blog}
-			handleUpdate={mockHandler}
-			handleDelete={mockHandler}
-			currentUserName={currentUserName}
-		/>
-	)
-})
+describe('Single blog component', () => {
+	it('renders without errors', () => {
+		const { container } = render(
+			<Provider store={store}>
+				<MemoryRouter>
+					<Blog blog={blog}/>
+				</MemoryRouter>
+			</Provider>
+		)
+		expect(container).toHaveTextContent('Single test blog title')
+	})
 
-test('renders content and only title and author is visible', () => {
-	// render
-	expect(component.container).toHaveTextContent(
-		'Component testing'
-	)
+	it('shows delete button if user is logged in and is the author', async () => {
+		window.localStorage.setItem(
+			'loggedUserJSON', JSON.stringify(user)
+		)
+		store.user = user
+		const { container } = render(
+			<Provider store={store}>
+				<MemoryRouter>
+					<Blog
+						blog={blog}
+						userId={user.id}
+					/>
+				</MemoryRouter>
+			</Provider>
+		)
+		await waitForElement(
+			() => container
+		)
+		expect(container).toHaveTextContent('delete')
+	})
 
-	// only title and author, rest is hidden
-	const element = component.getByText(
-		'Component testing Hank Hill'
-	)
-	expect(element).toBeDefined()
-
-	const div = component.container.querySelector('.more-info')
-	expect(div).toHaveStyle('display: none')
-})
-
-test('after clicking the title div, more info is displayed', () => {
-	const div = component.container.querySelector('.more-info')
-	fireEvent.click(div)
-
-	expect(div).not.toHaveStyle('display: none')
+	it('hides delete button otherwise', async () => {
+		user.id = '_wrong_test_id_4e43b3bd1'
+		window.localStorage.setItem(
+			'loggedUserJSON', JSON.stringify(user)
+		)
+		store.user = user
+		const { container } = render(
+			<Provider store={store}>
+				<MemoryRouter>
+					<Blog
+						blog={blog}
+						userId={user.id}
+					/>
+				</MemoryRouter>
+			</Provider>
+		)
+		await waitForElement(
+			() => container
+		)
+		expect(container).not.toHaveTextContent('delete')
+	})
 })
