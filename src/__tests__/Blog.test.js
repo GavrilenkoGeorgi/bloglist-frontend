@@ -1,67 +1,48 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router'
-import { render, fireEvent, cleanup, waitForElement } from '@testing-library/react'
+import { render, cleanup } from '@testing-library/react'
 import Blog from '../components/Blog'
-import App from '../App'
 import store from '../store'
 import blog from '../__mocks__/singleTestBlog'
 import user from '../__mocks__/testUser'
 
 afterEach(cleanup)
 
-describe('Single blog component', () => {
+describe('Blog component', () => {
+	let component
+	beforeEach(() => {
+		window.localStorage.setItem(
+			'loggedUserJSON', JSON.stringify(user)
+		)
+		component = render(
+			<MemoryRouter>
+				<Provider store={store}>
+					<Blog blog={blog} />
+				</Provider>
+			</MemoryRouter>
+		)
+	})
+
 	it('renders without errors', () => {
-		const { container } = render(
-			<Provider store={store}>
-				<MemoryRouter>
-					<Blog blog={blog}/>
-				</MemoryRouter>
-			</Provider>
-		)
-		expect(container).toHaveTextContent('Single test blog title')
+		expect(component.container).toHaveTextContent('Single test blog title')
 	})
 
-	it('shows delete button if user is logged in and is the author', async () => {
-		window.localStorage.setItem(
-			'loggedUserJSON', JSON.stringify(user)
-		)
-		store.user = user
-		const { container } = render(
-			<Provider store={store}>
-				<MemoryRouter>
-					<Blog
-						blog={blog}
-						userId={user.id}
-					/>
-				</MemoryRouter>
-			</Provider>
-		)
-		await waitForElement(
-			() => container
-		)
-		expect(container).toHaveTextContent('delete')
+	it('delete button is visible', () => {
+		expect(component.container).toHaveTextContent('delete')
 	})
 
-	it('hides delete button otherwise', async () => {
-		user.id = '_wrong_test_id_4e43b3bd1'
-		window.localStorage.setItem(
-			'loggedUserJSON', JSON.stringify(user)
+	it('delete button is not visible if created by another user', () => {
+		let anotherBlog = { ...blog }
+		anotherBlog.user.id = '_another_id_cda4e43b3bd1'
+
+		component.rerender(
+			<MemoryRouter>
+				<Provider store={store}>
+					<Blog blog={anotherBlog} />
+				</Provider>
+			</MemoryRouter>
 		)
-		store.user = user
-		const { container } = render(
-			<Provider store={store}>
-				<MemoryRouter>
-					<Blog
-						blog={blog}
-						userId={user.id}
-					/>
-				</MemoryRouter>
-			</Provider>
-		)
-		await waitForElement(
-			() => container
-		)
-		expect(container).not.toHaveTextContent('delete')
+		expect(component.container).not.toHaveTextContent('delete')
 	})
 })
