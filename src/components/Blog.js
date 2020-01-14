@@ -16,6 +16,7 @@ const Blog = ({ blog, ...props }) => {
 				props.setUserFromLocalStorage(loggedUser)
 			}
 		}
+	// eslint-disable-next-line
 	}, [])
 
 	/**
@@ -41,6 +42,10 @@ const Blog = ({ blog, ...props }) => {
 				})
 		}
 	}
+
+	/**
+	* Check if current user can delete this blog
+	*/
 
 	const checkAuthor = () => {
 		if (props.user) {
