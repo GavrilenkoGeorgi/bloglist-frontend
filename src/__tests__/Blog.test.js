@@ -1,50 +1,48 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
-import Blog from '../Blog'
+import { Provider } from 'react-redux'
+import { MemoryRouter } from 'react-router'
+import { render, cleanup } from '@testing-library/react'
+import Blog from '../components/Blog'
+import store from '../store'
+import blog from '../__mocks__/singleTestBlog'
+import user from '../__mocks__/testUser'
 
-let component
-const blog = {
-	title: 'Component testing',
-	author: 'Hank Hill',
-	url: 'some.url',
-	likes: 1,
-	user: {
-		id: '5dce9d7559d0641eb47ffb3a'
-	}
-}
-const currentUserName = 'Hank Hill'
-const mockHandler = jest.fn()
+afterEach(cleanup)
 
-beforeEach(() => {
-	component = render(
-		<Blog
-			blog={blog}
-			handleUpdate={mockHandler}
-			handleDelete={mockHandler}
-			currentUserName={currentUserName}
-		/>
-	)
-})
+describe('Blog component', () => {
+	let component
+	beforeEach(() => {
+		window.localStorage.setItem(
+			'loggedUserJSON', JSON.stringify(user)
+		)
+		component = render(
+			<MemoryRouter>
+				<Provider store={store}>
+					<Blog blog={blog} />
+				</Provider>
+			</MemoryRouter>
+		)
+	})
 
-test('renders content and only title and author is visible', () => {
-	// render
-	expect(component.container).toHaveTextContent(
-		'Component testing'
-	)
+	it('renders without errors', () => {
+		expect(component.container).toHaveTextContent('Single test blog title')
+	})
 
-	// only title and author, rest is hidden
-	const element = component.getByText(
-		'Component testing Hank Hill'
-	)
-	expect(element).toBeDefined()
+	it('delete button is visible', () => {
+		expect(component.container).toHaveTextContent('delete')
+	})
 
-	const div = component.container.querySelector('.more-info')
-	expect(div).toHaveStyle('display: none')
-})
+	it('delete button is not visible if created by another user', () => {
+		let anotherBlog = { ...blog }
+		anotherBlog.user.id = '_another_id_cda4e43b3bd1'
 
-test('after clicking the title div, more info is displayed', () => {
-	const div = component.container.querySelector('.more-info')
-	fireEvent.click(div)
-
-	expect(div).not.toHaveStyle('display: none')
+		component.rerender(
+			<MemoryRouter>
+				<Provider store={store}>
+					<Blog blog={anotherBlog} />
+				</Provider>
+			</MemoryRouter>
+		)
+		expect(component.container).not.toHaveTextContent('delete')
+	})
 })

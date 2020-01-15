@@ -10,7 +10,7 @@ const Logout = ({ setNotification }) => {
 		try {
 			window.localStorage.removeItem('loggedUserJSON')
 			document.location.href='/'
-			setNotification({ 
+			setNotification({
 				message: 'Successfully logged out.',
 				variant: 'info'
 			}, 3)
@@ -18,7 +18,7 @@ const Logout = ({ setNotification }) => {
 			const notification = JSON.parse(error.request.responseText)
 			setNotification({
 				message: notification.error,
-				variant: 'danger',
+				variant: 'danger'
 			}, 5)
 		}
 	}

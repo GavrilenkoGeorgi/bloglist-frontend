@@ -6,16 +6,10 @@ import { setNotification } from '../reducers/notificationReducer'
 import { Form, Button } from 'react-bootstrap'
 
 const CommentForm = (props) => {
-	// console.log('Props of comment form', props)
 	const { reset : resetComment, ...comment } = useField('text')
 
 	const handleComment = async event => {
 		event.preventDefault()
-		/*
-		const newComment = {
-			blogId: props.blogId,
-			content: comment.value,
-		}*/
 		const newComment = {
 			blog: props.blog,
 			content: comment.value,

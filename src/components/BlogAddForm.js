@@ -21,6 +21,11 @@ const BlogAddForm = (props) => {
 	const addBlog = (event) => {
 		event.preventDefault()
 
+		if (!title.value || !author.value || !url.value) {
+			props.setNotification({ message: 'Some fields are empty.', variant: 'danger' }, 5)
+			return
+		}
+
 		const blogObject = {
 			title: title.value,
 			author: author.value,
@@ -44,23 +49,25 @@ const BlogAddForm = (props) => {
 	return (
 		<Container>
 			<h2>Blog add form</h2>
-			<Form data-cy="addBlogForm" data-testid="addBlogForm" onSubmit={addBlog}>
+			<Form data-cy="addBlogForm" onSubmit={addBlog}>
 				<Form.Group>
-					<Form.Label>Title</Form.Label>
+					<Form.Label htmlFor="titleInput">Title</Form.Label>
 					<Form.Control
 						data-cy="newTitle"
 						name="title"
-						data-testid="title"
+						id="titleInput"
 						{...title}
 					/>
-					<Form.Label>Author</Form.Label>
+					<Form.Label htmlFor="authorInput">Author</Form.Label>
 					<Form.Control
 						data-cy="newAuthor"
+						id="authorInput"
 						{...author}
 					/>
-					<Form.Label>Url</Form.Label>
+					<Form.Label htmlFor="urlInput">Url</Form.Label>
 					<Form.Control
 						data-cy="newUrl"
+						id="urlInput"
 						{...url}
 					/>
 					<Button
