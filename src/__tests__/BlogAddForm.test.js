@@ -77,5 +77,3 @@ describe('Blog add form', () => {
 		expect(wrapper.container).toHaveTextContent('Some fields are empty.')
 	})
 })
-
-
