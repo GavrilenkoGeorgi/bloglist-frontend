@@ -8,7 +8,9 @@ import { setNotification } from '../reducers/notificationReducer'
 
 const UsersList = (props) => {
 	useEffect(() => {
-		userService.setToken(props.user.token)
+		if (props.user) { // this doesn't spark joy
+			userService.setToken(props.user.token)
+		}
 		props.getUsersList()
 			.catch(error => {
 				const notification = JSON.parse(error.request.responseText)

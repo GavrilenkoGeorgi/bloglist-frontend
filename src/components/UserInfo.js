@@ -9,8 +9,6 @@ const UserInfo = ({ userId, user, ...props }) => {
 			props.users.find(user => user.id === id)
 		const userBlogs = userById(userId).blogs
 
-		console.log(props.user)
-
 		return (
 			<>
 				<h3>User info</h3>
